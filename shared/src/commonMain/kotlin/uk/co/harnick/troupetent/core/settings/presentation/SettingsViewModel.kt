@@ -8,8 +8,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import uk.co.harnick.troupetent.common.servicelocator.modules.IODispatcher
-import uk.co.harnick.troupetent.core.settings.domain.mappers.DisplaySettingsAdapters.toDisplaySettings
-import uk.co.harnick.troupetent.core.settings.domain.mappers.GeneralSettingsAdapters.toGeneralSettings
+import uk.co.harnick.troupetent.core.settings.domain.mappers.DisplaySettingsMappers.toDisplaySettings
+import uk.co.harnick.troupetent.core.settings.domain.mappers.GeneralSettingsMappers.toGeneralSettings
 import uk.co.harnick.troupetent.core.settings.domain.model.SettingCollection
 import uk.co.harnick.troupetent.core.settings.domain.model.display.DisplaySettings
 import uk.co.harnick.troupetent.core.settings.domain.model.general.GeneralSettings

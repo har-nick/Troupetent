@@ -38,7 +38,7 @@ sealed class Destination(
     )
 
     data class Library(private val account: Account) : Destination(
-        screenProvider = { LibraryScreen(account) },
+        screenProvider = { LibraryScreen },
         icon = DestinationIcon(
             active = Res.drawable.library_music_filled,
             inactive = Res.drawable.library_music_outlined

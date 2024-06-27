@@ -9,7 +9,6 @@ import androidx.compose.runtime.getValue
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.uniqueScreenKey
-import uk.co.harnick.troupetent.Account
 import uk.co.harnick.troupetent.common.servicelocator.ServiceLocator
 import uk.co.harnick.troupetent.feature.library.domain.model.LibraryTabs
 import uk.co.harnick.troupetent.feature.library.presentation.components.LibraryContentPager
@@ -17,7 +16,7 @@ import uk.co.harnick.troupetent.feature.library.presentation.components.playerwi
 import uk.co.harnick.troupetent.feature.library.presentation.components.topbar.LibraryHeader
 
 @OptIn(ExperimentalFoundationApi::class)
-actual class LibraryScreen actual constructor(private val account: Account) : Screen {
+actual object LibraryScreen : Screen {
     // Transition crashes without this since K2. No idea why.
     override val key = uniqueScreenKey
 
@@ -27,7 +26,7 @@ actual class LibraryScreen actual constructor(private val account: Account) : Sc
 
         val libraryViewModel = rememberScreenModel {
             LibraryViewModel(
-                currentAccount = account,
+                currentAccount = accountState.currentAccount!!,
                 ioDispatcher = ServiceLocator.coroutineModule.ioDispatcher,
                 libraryRepo = ServiceLocator.repoBindings.libraryRepo,
                 libraryUseCases = ServiceLocator.useCaseModule.libraryUseCases
