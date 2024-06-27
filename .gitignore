@@ -9,3 +9,4 @@ captures
 local.properties
 secret.properties
 xcuserdata
+/.kotlin/
