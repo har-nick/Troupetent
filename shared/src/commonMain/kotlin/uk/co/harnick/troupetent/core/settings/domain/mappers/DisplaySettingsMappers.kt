@@ -9,7 +9,7 @@ import uk.co.harnick.troupetent.core.settings.domain.model.display.PaletteSettin
 import uk.co.harnick.troupetent.core.settings.domain.model.display.SeedColorSetting
 import uk.co.harnick.troupetent.core.settings.domain.model.display.ThemeSetting
 
-object DisplaySettingsAdapters {
+object DisplaySettingsMappers {
     fun DisplaySettingsEntity.toDisplaySettings() = DisplaySettings(
         artQuality ?: ArtQualitySetting(),
         materialYou ?: MaterialYouSetting(),
