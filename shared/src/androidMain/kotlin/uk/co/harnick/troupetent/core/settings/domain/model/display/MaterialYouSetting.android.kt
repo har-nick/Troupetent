@@ -1,0 +1,19 @@
+package uk.co.harnick.troupetent.core.settings.domain.model.display
+
+import android.os.Build.VERSION
+import android.os.Build.VERSION_CODES
+import org.jetbrains.compose.resources.DrawableResource
+import troupetent.shared.generated.resources.Res
+import troupetent.shared.generated.resources.palette_filled
+import uk.co.harnick.troupetent.core.settings.domain.model.Setting
+
+actual class MaterialYouSetting actual constructor(
+    override val value: Boolean
+) : Setting<Boolean> {
+    override val description: String? = null
+    override val helpLink: String? = null
+    override val icon: DrawableResource = Res.drawable.palette_filled
+    override val isVisible: Boolean = (VERSION.SDK_INT >= VERSION_CODES.S)
+    override val title: String = "Material You"
+    override val warning: String? = null
+}

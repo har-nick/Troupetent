@@ -1,0 +1,12 @@
+import java.time.ZonedDateTime;
+
+CREATE TABLE PlayerHistory (
+    trackId INTEGER NOT NULL,
+    dateTimePlayed TEXT AS ZonedDateTime NOT NULL,
+    ownerId INTEGER NOT NULL,
+    FOREIGN KEY(ownerId) REFERENCES Account(id) ON DELETE CASCADE
+);
+
+update: INSERT INTO PlayerHistory (trackId, dateTimePlayed, ownerId) VALUES (?, ?, ?);
+delete: DELETE FROM PlayerHistory WHERE trackId = ? AND dateTimePlayed = ? LIMIT 1;
+drop: DELETE FROM PlayerHistory WHERE ownerId = ?;

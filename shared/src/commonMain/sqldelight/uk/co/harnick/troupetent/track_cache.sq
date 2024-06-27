@@ -1,0 +1,12 @@
+PRAGMA auto_vacuum = 1;
+
+CREATE TABLE TrackCache (
+    ownerId INTEGER NOT NULL,
+    artUri TEXT,
+    fileUri TEXT,
+    FOREIGN KEY(ownerId) REFERENCES Account(id) ON DELETE CASCADE
+);
+
+load: SELECT * FROM TrackCache WHERE ownerId = ?;
+save: REPLACE INTO TrackCache (ownerId, artUri, fileUri) VALUES (?, ?, ?);
+drop: DELETE FROM TrackCache;

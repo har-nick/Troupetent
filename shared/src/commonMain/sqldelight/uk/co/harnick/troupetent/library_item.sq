@@ -1,0 +1,26 @@
+import java.time.ZonedDateTime;
+import kotlin.collections.List;
+import uk.co.harnick.bandkit.data.model.Artist;
+import uk.co.harnick.bandkit.data.model.ItemType;
+import uk.co.harnick.bandkit.data.model.Track;
+
+CREATE TABLE LibraryItem (
+    artist TEXT AS Artist NOT NULL,
+    artId INTEGER NOT NULL,
+    dateTimePurchased TEXT AS ZonedDateTime NOT NULL,
+    dateTimeReleased TEXT AS ZonedDateTime NOT NULL,
+    downloadLink TEXT,
+    favoriteTrackId INTEGER,
+    id INTEGER PRIMARY KEY NOT NULL,
+    ownerId INTEGER NOT NULL,
+    trackList TEXT AS List<Track>,
+    title TEXT NOT NULL,
+    type TEXT AS ItemType NOT NULL,
+    FOREIGN KEY(ownerId) REFERENCES Account(id) ON DELETE CASCADE
+);
+
+load: SELECT * FROM LibraryItem WHERE ownerId = ?;
+save: REPLACE INTO LibraryItem VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+delete: DELETE FROM LibraryItem WHERE ownerId = ?;
+
+

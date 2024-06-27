@@ -1,98 +1,106 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat.AppImage
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat.Exe
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.compose.multiplatform)
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.jetbrains.compose)
     alias(libs.plugins.kotlinx.serialization)
     alias(libs.plugins.sqldelight)
-//    alias(libs.plugins.moko.resources.generator)
 }
 
-@OptIn(ExperimentalKotlinGradlePluginApi::class)
 kotlin {
-    targetHierarchy.default()
+    applyDefaultHierarchyTemplate()
+    jvmToolchain(libs.versions.jdk.get().toInt())
 
-    jvm {
-        compilations.all {
-            kotlinOptions {
-                jvmTarget = "17"
-            }
-        }
-    }
+    jvm("desktop")
 
     androidTarget {
-        compilations.all {
-            kotlinOptions {
-                jvmTarget = "17"
-            }
+        dependencies {
+            coreLibraryDesugaring(libs.android.desugaring)
+            debugImplementation(libs.bundles.debug)
         }
     }
 
-    @Suppress("UnusedPrivateProperty")
     sourceSets {
-        val commonMain by getting {
-            dependencies {
-                implementation(libs.bundles.compose.multiplatform)
-                implementation(libs.bundles.ktor)
-                implementation(libs.bundles.moko)
-                implementation(libs.bundles.voyager)
+        val desktopMain by getting
 
-                implementation(libs.bandkit)
-                implementation(libs.coroutines.core)
-                implementation(libs.kamel)
-                implementation(libs.koin.core)
-                implementation(libs.koin.compose)
-                implementation(libs.kotlinx.collections.immutable)
-                implementation(libs.kotlinx.datetime)
-                implementation(libs.kotlinx.serialization.json)
-//                api(libs.moko.resources)
-                implementation(libs.sqldelight.coroutines)
-                implementation(libs.windowsize)
-            }
-        }
-        val commonTest by getting {
-            dependencies {
-                implementation(kotlin("test"))
-            }
+        commonMain.dependencies {
+            implementation(libs.bundles.compose.multiplatform)
+
+            implementation(libs.bundles.ktor)
+            implementation(libs.bundles.material.you.utils)
+            implementation(libs.bundles.sqldelight.utils)
+            implementation(libs.bundles.voyager)
+
+            implementation(libs.bandkit)
+            implementation(libs.coroutines.core)
+            implementation(libs.kamel)
+            implementation(libs.reflection)
+            implementation(libs.systemutils)
+            implementation(libs.windowsize)
         }
 
-        val androidMain by getting {
-            dependencies {
-                implementation(libs.coroutines.android)
-                implementation(libs.koin.android)
-                implementation(libs.sqldelight.driver.android)
-            }
+        androidMain.dependencies {
+            implementation(libs.bundles.media3)
+
+            implementation(libs.androidx.core)
+            implementation(libs.androidx.splashscreen)
+            implementation(libs.compose.activity)
+            implementation(libs.coroutines.android)
+            implementation(libs.sqldelight.driver.android)
         }
 
-        val jvmMain by getting {
-            dependencies {
-                implementation(compose.desktop.currentOs)
-                implementation(libs.coroutines.jvm)
-                implementation(libs.coroutines.swing)
-                implementation(libs.sqldelight.driver.jvm)
-            }
+        desktopMain.dependencies {
+            implementation(compose.desktop.currentOs)
+            implementation(libs.coroutines.jvm)
+            implementation(libs.coroutines.swing)
+            implementation(libs.sqldelight.driver.jvm)
+        }
+
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
         }
     }
 }
 
 android {
     namespace = "uk.co.harnick.troupetent"
-    compileSdk = 33
-    defaultConfig.minSdk = 21
-    packaging.resources.excludes += "/META-INF/{AL2.0,LGPL2.1,DEPENDENCIES,MANIFEST,NOTICE,LICENSE}"
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+    compileSdk = libs.versions.android.sdk.compile.get().toInt()
+
+    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+    sourceSets["main"].res.srcDirs("src/androidMain/res")
+    sourceSets["main"].resources.srcDirs("src/commonMain/resources")
+
+    buildFeatures.compose = true
+
+    defaultConfig {
+        applicationId = "uk.co.harnick.troupetent"
+        minSdk = libs.versions.android.sdk.min.get().toInt()
+        targetSdk = libs.versions.android.sdk.compile.get().toInt()
+        versionCode = 1
+        versionName = "0.1 - Alpha"
     }
+    compileOptions {
+        isCoreLibraryDesugaringEnabled = true
+        sourceCompatibility = JavaVersion.toVersion(libs.versions.jdk.get())
+        targetCompatibility = JavaVersion.toVersion(libs.versions.jdk.get())
+    }
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1,versions/9/previous-compilation-data.bin}"
+        }
+    }
+}
+composeCompiler {
+    enableNonSkippingGroupOptimization = true
+    enableStrongSkippingMode = true
 }
 
 compose {
     desktop.application {
         mainClass = "MainKt"
-
         nativeDistributions {
             targetFormats(AppImage, Exe)
         }
@@ -106,8 +114,3 @@ sqldelight {
         }
     }
 }
-
-//multiplatformResources {
-//    multiplatformResourcesPackage = "uk.co.harnick.troupetent.resources"
-//    multiplatformResourcesClassName = "MokoRes"
-//}
