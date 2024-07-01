@@ -6,8 +6,6 @@ import uk.co.harnick.troupetent.common.servicelocator.modules.CoroutineModule
 import uk.co.harnick.troupetent.common.servicelocator.modules.CoroutineModuleImpl
 import uk.co.harnick.troupetent.common.servicelocator.modules.DatabaseModule
 import uk.co.harnick.troupetent.common.servicelocator.modules.DatabaseModuleImpl
-import uk.co.harnick.troupetent.common.servicelocator.modules.PlayerModule
-import uk.co.harnick.troupetent.common.servicelocator.modules.PlayerModuleImpl
 import uk.co.harnick.troupetent.common.servicelocator.modules.RepoBindings
 import uk.co.harnick.troupetent.common.servicelocator.modules.RepoBindingsImpl
 import uk.co.harnick.troupetent.common.servicelocator.modules.UseCaseModule
@@ -25,8 +23,7 @@ actual object ServiceLocator {
 
     actual val coroutineModule: CoroutineModule = CoroutineModuleImpl
     actual val databaseModule: DatabaseModule by lazy { DatabaseModuleImpl(appContext) }
-    actual val playerModule: PlayerModule by lazy { PlayerModuleImpl(appContext) }
-    actual val repoBindings: RepoBindings by lazy { RepoBindingsImpl(databaseModule, playerModule) }
+    actual val repoBindings: RepoBindings by lazy { RepoBindingsImpl(databaseModule) }
     actual val useCaseModule: UseCaseModule by lazy { UseCaseModuleImpl(repoBindings) }
     actual val viewModelModule: ViewModelModule by lazy {
         ViewModelModuleImpl(coroutineModule, repoBindings, useCaseModule)

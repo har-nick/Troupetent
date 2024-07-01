@@ -14,8 +14,8 @@ actual object ServiceLocator {
     actual val coroutineModule: CoroutineModule = CoroutineModuleImpl
     actual val databaseModule: DatabaseModule =
         uk.co.harnick.troupetent.common.servicelocator.modules.DatabaseModuleImpl()
-    actual val repoBindings: RepoBindings = RepoBindingsImpl(databaseModule.localStorage)
+    actual val repoBindings: RepoBindings = RepoBindingsImpl(databaseModule)
     actual val useCaseModule: UseCaseModule = UseCaseModuleImpl(repoBindings)
     actual val viewModelModule: ViewModelModule =
-        ViewModelModuleImpl(coroutineModule, useCaseModule)
+        ViewModelModuleImpl(coroutineModule, repoBindings, useCaseModule)
 }

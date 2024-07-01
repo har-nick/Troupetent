@@ -1,0 +1,12 @@
+import java.time.ZonedDateTime;
+
+CREATE TABLE PlayerHistoryEntity (
+    trackId INTEGER NOT NULL,
+    dateTimePlayed TEXT AS ZonedDateTime NOT NULL,
+    ownerId INTEGER NOT NULL,
+    FOREIGN KEY(ownerId) REFERENCES BandcampAccountEntity(id) ON DELETE CASCADE
+);
+
+update: INSERT INTO PlayerHistoryEntity (trackId, dateTimePlayed, ownerId) VALUES (?, ?, ?);
+delete: DELETE FROM PlayerHistoryEntity WHERE trackId = ? AND dateTimePlayed = ? LIMIT 1;
+drop: DELETE FROM PlayerHistoryEntity WHERE ownerId = ?;

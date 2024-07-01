@@ -1,0 +1,10 @@
+import uk.co.harnick.troupetent.core.settings.domain.model.accessibility.LeftHandedModeSetting;
+
+CREATE TABLE AccessibilitySettingsEntity (
+    id INTEGER NOT NULL PRIMARY KEY CHECK (id = 0),
+    leftHandedMode INTEGER AS LeftHandedModeSetting
+);
+
+load: SELECT * FROM AccessibilitySettingsEntity;
+save: REPLACE INTO AccessibilitySettingsEntity VALUES (0, ?);
+drop: DELETE FROM AccessibilitySettingsEntity;

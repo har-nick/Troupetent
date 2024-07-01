@@ -9,7 +9,7 @@ import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaSessionService
 
-class ExoPlayerService() : MediaSessionService() {
+class ExoPlayerService : MediaSessionService() {
     override fun onDestroy() {
         mediaSession?.run {
             player.release()

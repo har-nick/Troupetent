@@ -12,34 +12,29 @@ plugins {
 
 kotlin {
     applyDefaultHierarchyTemplate()
-    jvmToolchain(libs.versions.jdk.get().toInt())
-
+    androidTarget()
     jvm("desktop")
-
-    androidTarget {
-        dependencies {
-            coreLibraryDesugaring(libs.android.desugaring)
-            debugImplementation(libs.bundles.debug)
-        }
-    }
 
     sourceSets {
         val desktopMain by getting
 
         commonMain.dependencies {
-            implementation(libs.bundles.compose.multiplatform)
-
             implementation(libs.bundles.ktor)
             implementation(libs.bundles.material.you.utils)
             implementation(libs.bundles.sqldelight.utils)
-            implementation(libs.bundles.voyager)
 
             implementation(libs.bandkit)
+            implementation(libs.chrisbanes.windowsizeclass)
             implementation(libs.coroutines.core)
-            implementation(libs.kamel)
+            implementation(libs.compose.viewmodel)
+            implementation(libs.compose.webview)
             implementation(libs.reflection)
-            implementation(libs.systemutils)
-            implementation(libs.windowsize)
+            implementation(libs.sqldelight.coroutines)
+
+            implementation(compose.foundation)
+            implementation(compose.material3)
+            implementation(compose.runtime)
+            implementation(compose.uiTooling)
         }
 
         androidMain.dependencies {
@@ -48,6 +43,8 @@ kotlin {
             implementation(libs.androidx.core)
             implementation(libs.androidx.splashscreen)
             implementation(libs.compose.activity)
+            implementation(libs.compose.preview)
+            implementation(libs.compose.navigation)
             implementation(libs.coroutines.android)
             implementation(libs.sqldelight.driver.android)
         }
@@ -82,20 +79,17 @@ android {
         versionCode = 1
         versionName = "0.1 - Alpha"
     }
+
     compileOptions {
-        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.toVersion(libs.versions.jdk.get())
         targetCompatibility = JavaVersion.toVersion(libs.versions.jdk.get())
     }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1,versions/9/previous-compilation-data.bin}"
         }
     }
-}
-composeCompiler {
-    enableNonSkippingGroupOptimization = true
-    enableStrongSkippingMode = true
 }
 
 compose {

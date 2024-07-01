@@ -1,0 +1,16 @@
+PRAGMA auto_vacuum = 1;
+
+CREATE TABLE BandcampAccountEntity (
+    avatarId INTEGER,
+    bannerId INTEGER,
+    id INTEGER PRIMARY KEY NOT NULL,
+    nickname TEXT,
+    ownerId INTEGER NOT NULL,
+    token TEXT NOT NULL,
+    username TEXT NOT NULL
+);
+
+save: REPLACE INTO BandcampAccountEntity VALUES (?, ?, ?, ?, ?, ?, ?);
+load: SELECT * FROM BandcampAccountEntity;
+delete: DELETE FROM BandcampAccountEntity WHERE id = ?;
+drop: DELETE FROM BandcampAccountEntity;

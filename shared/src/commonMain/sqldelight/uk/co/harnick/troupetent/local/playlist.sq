@@ -1,0 +1,13 @@
+import java.time.ZonedDateTime;
+
+CREATE TABLE PlaylistEntity (
+    ownerId INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    dateTimeCreated TEXT AS ZonedDateTime NOT NULL,
+    trackList TEXT,
+    FOREIGN KEY(ownerId) REFERENCES BandcampAccountEntity(id) ON DELETE CASCADE
+);
+
+load: SELECT * FROM PlaylistEntity WHERE ownerId = ?;
+save: REPLACE INTO PlaylistEntity VALUES (?, ?, ?, ?);
+delete: DELETE FROM PlaylistEntity WHERE ownerId = ?;

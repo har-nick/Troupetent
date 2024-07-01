@@ -1,6 +1,5 @@
 package uk.co.harnick.troupetent.core.util
 
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import kotlin.random.Random
 
@@ -11,7 +10,6 @@ object Random {
 
     fun int(length: Int = 32): Int = string(length).toInt()
 
-    @Composable
     fun color(): Color = Color(
         red = Random.nextInt(256),
         green = Random.nextInt(256),

@@ -1,23 +1,25 @@
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Window
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.window.application
-import androidx.compose.ui.window.rememberWindowState
+import uk.co.harnick.troupetent.common.servicelocator.ServiceLocator.viewModelModule
 import uk.co.harnick.troupetent.core.Troupetent
-import uk.co.harnick.troupetent.core.ui.presentation.DesktopUriHandler
-import java.awt.Dimension
+import uk.co.harnick.troupetent.core.ui.presentation.ThemeProviders
+import uk.co.harnick.troupetent.core.ui.presentation.components.MainWindow
+import uk.co.harnick.troupetent.core.ui.presentation.components.Splash
 
 fun main() = application {
-    Window(
-        onCloseRequest = ::exitApplication,
-        title = "Troupetent",
-        state = rememberWindowState(width = 1400.dp, height = 800.dp)
-    ) {
-        window.minimumSize = Dimension(850, 600)
+    // NOTE: I'd put this in ViewModelModule, but nullability can't be inferred.
+    val allSettingsLoaded by viewModelModule.settingsVM.allSettingsLoaded.collectAsState()
+    val displaySettings by viewModelModule.settingsVM.displaySettings.collectAsState()
 
-        CompositionLocalProvider(LocalUriHandler provides DesktopUriHandler) {
-            Troupetent()
+    val isReady = (allSettingsLoaded)
+
+    displaySettings?.let {
+        ThemeProviders(it) {
+            if (!isReady) Splash()
+            else MainWindow {
+                Troupetent()
+            }
         }
     }
 }

@@ -4,22 +4,19 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import uk.co.harnick.troupetent.common.servicelocator.ServiceLocator
 import uk.co.harnick.troupetent.core.Troupetent
 
-class MainActivity : ComponentActivity() {
-    private fun installSplashscreen() {
-        installSplashScreen()
-            .apply {
-                setKeepOnScreenCondition {
-                    ServiceLocator.viewModelModule.accountViewModel.state.value.isLoadingAccounts
-                }
-            }
-    }
+private fun MainActivity.installSplashscreen(onScreenCondition: Boolean) {
+    installSplashScreen()
+        .apply {
+            setKeepOnScreenCondition { onScreenCondition }
+        }
+}
 
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        installSplashscreen()
+        installSplashscreen(false)
         setContent {
             Troupetent()
         }

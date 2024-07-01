@@ -1,13 +1,17 @@
 package uk.co.harnick.troupetent.core.settings.domain.model
 
-import org.jetbrains.compose.resources.DrawableResource
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.vector.ImageVector
 import java.security.InvalidParameterException
 
-interface SettingCollection {
-    val entries: List<Setting<*>>
-    val icon: DrawableResource
-    val summary: String
-    val title: String
+open class SettingCollection(
+    open val title: String
+) {
+    open val icon: ImageVector?
+        @Composable
+        get() = null
+
+    open val summary: String? = null
 }
 
 fun SettingCollection.update(newSetting: Setting<*>): SettingCollection {
@@ -19,7 +23,9 @@ fun SettingCollection.update(newSetting: Setting<*>): SettingCollection {
             isAccessible = true
             set(copiedSettings, newSetting)
         }
-        ?: throw InvalidParameterException("${newSetting::class.simpleName} is not a parameter of ${copiedSettings::class.simpleName}")
+        ?: throw InvalidParameterException(
+            "${newSetting::class.simpleName} is not a parameter of ${copiedSettings::class.simpleName}"
+        )
 
     return copiedSettings
 }

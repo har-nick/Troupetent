@@ -1,0 +1,14 @@
+PRAGMA auto_vacuum = 1;
+
+CREATE TABLE LocalAccountEntity(
+    avatarId INTEGER DEFAULT NULL,
+    dateTimeLastUsed INTEGER NOT NULL,
+    id INTEGER PRIMARY KEY NOT NULL,
+    nickname TEXT DEFAULT NULL,
+    username TEXT NOT NULL
+);
+
+save: REPLACE INTO LocalAccountEntity VALUES (?, ?, ?, ?, ?);
+load: SELECT * FROM LocalAccountEntity;
+delete: DELETE FROM LocalAccountEntity WHERE id = ?;
+drop: DELETE FROM LocalAccountEntity;

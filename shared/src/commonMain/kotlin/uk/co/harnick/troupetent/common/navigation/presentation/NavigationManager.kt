@@ -1,46 +1,63 @@
 package uk.co.harnick.troupetent.common.navigation.presentation
 
-import androidx.compose.material.Surface
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass.Companion.Expanded
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass.Companion.Medium
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import cafe.adriel.voyager.core.annotation.ExperimentalVoyagerApi
-import cafe.adriel.voyager.jetpack.ProvideNavigatorLifecycleKMPSupport
-import cafe.adriel.voyager.navigator.Navigator
-import uk.co.harnick.troupetent.common.navigation.domain.model.Destination.Library
-import uk.co.harnick.troupetent.common.navigation.domain.model.Destination.Onboarding
-import uk.co.harnick.troupetent.common.navigation.presentation.components.AtomicContextLeakFix
-import uk.co.harnick.troupetent.common.servicelocator.ServiceLocator
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import uk.co.harnick.troupetent.common.navigation.presentation.Screen.Access
+import uk.co.harnick.troupetent.common.navigation.presentation.Screen.Library
+import uk.co.harnick.troupetent.common.navigation.presentation.Screen.Playlists
+import uk.co.harnick.troupetent.common.navigation.presentation.Screen.Radio
+import uk.co.harnick.troupetent.common.navigation.presentation.components.ExpandableNavigationRail
+import uk.co.harnick.troupetent.common.navigation.presentation.components.ExpandableNavigationRailItem
 
-@OptIn(ExperimentalVoyagerApi::class)
-object NavigationManager {
-    @Composable
-    operator fun invoke(content: @Composable (Navigator) -> Unit) {
-        val accountsState by ServiceLocator.viewModelModule.accountViewModel.state.collectAsState()
-        val initialDestination by remember(accountsState.accountList) {
-            derivedStateOf {
-                if (accountsState.isLoadingAccounts) null
-                else accountsState.currentAccount
-                    ?.let { Library(it) }
-                    ?: Onboarding
-            }
-        }
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+@Composable
+fun NavigationManager(isLoggedIn: Boolean) {
+    val windowWidth = calculateWindowSizeClass().widthSizeClass
+    var currentScreen by rememberSaveable(isLoggedIn) {
+        mutableStateOf(if (isLoggedIn) Library else Access)
+    }
 
-        initialDestination?.let { destination ->
-            ProvideNavigatorLifecycleKMPSupport {
-                Navigator(destination.screenProvider()) { navigator ->
-                    AtomicContextLeakFix(navigator)
+    when (windowWidth) {
+        Medium, Expanded -> {
+            var isExpanded by remember { mutableStateOf(false) }
 
-                    // Triggers login when OnboardingScreen retrieves a token
-                    LaunchedEffect(destination) {
-                        navigator.replaceAll(destination.screenProvider())
-                    }
+            ExpandableNavigationRail(
+                isExpanded = isExpanded,
+                onToggleExpand = { isExpanded = !isExpanded }
+            ) {
+                ExpandableNavigationRailItem(
+                    isExpanded = isExpanded,
+                    isSelected = (currentScreen == Library),
+                    onNavigate = { currentScreen = Library },
+                    isEnabled = isLoggedIn
+                ) {
 
-                    // Wrapping in a Surface avoids flashing backgrounds on transition
-                    Surface { content(navigator) }
+                }
+
+                ExpandableNavigationRailItem(
+                    isExpanded = isExpanded,
+                    isSelected = (currentScreen == Playlists),
+                    onNavigate = { currentScreen = Playlists },
+                    isEnabled = isLoggedIn,
+                ) {
+
+                }
+
+                ExpandableNavigationRailItem(
+                    isExpanded = isExpanded,
+                    isSelected = (currentScreen == Radio),
+                    onNavigate = { currentScreen = Radio },
+                    isEnabled = isLoggedIn,
+                ) {
+
                 }
             }
         }

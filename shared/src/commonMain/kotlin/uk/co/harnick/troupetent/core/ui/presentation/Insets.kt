@@ -11,13 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
-@androidx.compose.runtime.Composable
-fun Eh(modifier: androidx.compose.ui.Modifier = androidx.compose.ui.Modifier) {
-    val text: String? = null
-
-    text
-}
-
 object Insets {
     val displayCutout: Dp
         @Composable

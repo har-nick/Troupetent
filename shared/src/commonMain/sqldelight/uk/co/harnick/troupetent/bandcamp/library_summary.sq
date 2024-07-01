@@ -1,0 +1,11 @@
+import kotlin.Int;
+
+CREATE TABLE LibrarySummaryEntity (
+    itemCount INTEGER AS Int NOT NULL,
+    ownerId INTEGER NOT NULL PRIMARY KEY,
+    FOREIGN KEY(ownerId) REFERENCES BandcampAccountEntity(id) ON DELETE CASCADE
+);
+
+load: SELECT * FROM LibrarySummaryEntity WHERE ownerId = (?) LIMIT 1;
+save: REPLACE INTO LibrarySummaryEntity VALUES (?, ?);
+delete: DELETE FROM LibrarySummaryEntity WHERE ownerId = (?);

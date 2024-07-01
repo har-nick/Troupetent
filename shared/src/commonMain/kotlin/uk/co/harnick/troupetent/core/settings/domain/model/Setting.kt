@@ -1,13 +1,18 @@
 package uk.co.harnick.troupetent.core.settings.domain.model
 
-import org.jetbrains.compose.resources.DrawableResource
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.vector.ImageVector
 
-interface Setting<T> {
-    val description: String?
-    val helpLink: String?
-    val icon: DrawableResource
-    val isVisible: Boolean
-    val title: String
-    val value: T
-    val warning: String?
+open class Setting<T>(
+    open val value: T,
+    open val title: String
+) {
+    open val icon: ImageVector?
+        @Composable
+        get() = null
+
+    open val description: String? = null
+    open val helpLink: String? = null
+    open val warning: String? = null
+    open val isVisible: Boolean = true
 }

@@ -1,0 +1,20 @@
+import java.time.ZonedDateTime;
+import kotlin.collections.List;
+
+CREATE TABLE LibraryItemEntity (
+    id INTEGER PRIMARY KEY NOT NULL,
+    type TEXT NOT NULL,
+    artist TEXT NOT NULL,
+    artId INTEGER NOT NULL,
+    dateAddedToLibrary TEXT NOT NULL,
+    title TEXT NOT NULL,
+    downloadLink TEXT NOT NULL,
+    favoriteTrackId INTEGER,
+    ownerId INTEGER NOT NULL,
+    trackList TEXT,
+    FOREIGN KEY(ownerId) REFERENCES BandcampAccountEntity(id) ON DELETE CASCADE
+);
+
+load: SELECT * FROM LibraryItemEntity WHERE ownerId = ?;
+save: REPLACE INTO LibraryItemEntity VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+delete: DELETE FROM LibraryItemEntity WHERE ownerId = ?;

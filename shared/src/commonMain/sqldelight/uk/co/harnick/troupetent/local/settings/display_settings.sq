@@ -1,0 +1,20 @@
+import uk.co.harnick.troupetent.core.settings.domain.model.display.ArtQualitySetting;
+import uk.co.harnick.troupetent.core.settings.domain.model.display.DesignSetting;
+import uk.co.harnick.troupetent.core.settings.domain.model.display.FontSetting;
+import uk.co.harnick.troupetent.core.settings.domain.model.display.IconsSetting;
+import uk.co.harnick.troupetent.core.settings.domain.model.display.ThemeSetting;
+
+PRAGMA auto_vacuum = 1;
+
+CREATE TABLE IF NOT EXISTS DisplaySettingsEntity (
+    id INTEGER NOT NULL PRIMARY KEY CHECK (id = 0),
+    artQuality TEXT AS ArtQualitySetting,
+    design TEXT AS DesignSetting,
+    font TEXT AS FontSetting,
+    icons TEXT AS IconsSetting,
+    theme TEXT AS ThemeSetting
+);
+
+load: SELECT * FROM DisplaySettingsEntity;
+save: REPLACE INTO DisplaySettingsEntity VALUES (0, ?, ?, ?, ?, ?);
+drop: DELETE FROM DisplaySettingsEntity;

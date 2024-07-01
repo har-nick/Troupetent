@@ -36,15 +36,5 @@
                 <data android:pathPrefix="/login_confirmed" />
             </intent-filter>
         </activity>
-
-        <service
-            android:name=".ExoPlayerService"
-            android:exported="false"
-            android:foregroundServiceType="mediaPlayback">
-            <intent-filter>
-                <action android:name="android.media.browse.MediaBrowserService"/>
-                <action android:name="androidx.media3.session.MediaSessionService" />
-            </intent-filter>
-        </service>
     </application>
 </manifest>

@@ -1,11 +1,9 @@
 package uk.co.harnick.troupetent.common.servicelocator.modules
 
-import uk.co.harnick.troupetent.core.account.bandcamp.presentation.AccountViewModel
-import uk.co.harnick.troupetent.core.settings.presentation.SettingsViewModel
+import uk.co.harnick.troupetent.core.settings.presentation.SettingsVM
 
 interface ViewModelModule {
-    val accountViewModel: AccountViewModel
-    val settingsViewModel: SettingsViewModel
+    val settingsVM: SettingsVM
 }
 
 class ViewModelModuleImpl(
@@ -13,12 +11,6 @@ class ViewModelModuleImpl(
     repoBindings: RepoBindings,
     useCaseModule: UseCaseModule
 ) : ViewModelModule {
-    override val accountViewModel: AccountViewModel =
-        AccountViewModel(
-            useCaseModule.accountUseCases,
-            repoBindings.accountRepo,
-            coroutineModule.ioDispatcher
-        )
-    override val settingsViewModel: SettingsViewModel =
-        SettingsViewModel(coroutineModule.ioDispatcher, repoBindings.settingsRepo)
+    override val settingsVM: SettingsVM =
+        SettingsVM(coroutineModule.ioDispatcher, repoBindings.settingsRepo)
 }
