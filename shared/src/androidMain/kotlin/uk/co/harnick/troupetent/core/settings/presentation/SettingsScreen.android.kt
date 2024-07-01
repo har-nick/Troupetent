@@ -12,15 +12,18 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import uk.co.harnick.troupetent.common.servicelocator.ServiceLocator
+import uk.co.harnick.troupetent.core.settings.presentation.SettingsEvent.Screen.SetViewedCollection
 import uk.co.harnick.troupetent.core.settings.presentation.components.SettingsTopAppBar
 import uk.co.harnick.troupetent.core.settings.presentation.components.ToCollectionEntry
 
 actual object SettingsScreen : Screen {
+    private val settingsVM = ServiceLocator.viewModelModule.settingsViewModel
+    private val settingsEvent = settingsVM::onEvent
+
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
 
-        val settingsVM = ServiceLocator.viewModelModule.settingsViewModel
         val settingsState by settingsVM.state.collectAsState()
 
         Scaffold(
@@ -31,7 +34,10 @@ actual object SettingsScreen : Screen {
             ) {
                 items(settingsState.entries) { collection ->
                     collection.ToCollectionEntry {
-                        navigator.push(SettingCollectionScreen(collection))
+                        // We can't pass a KClass via screen params as it's not serializable.
+                        settingsEvent(SetViewedCollection(collection))
+
+                        navigator.push(SettingCollectionScreen)
                     }
                 }
             }

@@ -14,5 +14,5 @@ class ArtQualitySetting(
     override val icon: DrawableResource = Res.drawable.photo_size_select_small
     override val isVisible: Boolean = true
     override val title: String = "Image Quality"
-    override val warning: String = "Loading larger images may take longer"
+    override val warning: String = "Larger images take longer to load"
 }

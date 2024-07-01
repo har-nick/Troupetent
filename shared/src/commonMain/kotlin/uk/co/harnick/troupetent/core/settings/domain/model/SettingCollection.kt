@@ -4,10 +4,10 @@ import org.jetbrains.compose.resources.DrawableResource
 import java.security.InvalidParameterException
 
 interface SettingCollection {
-    val icon: DrawableResource
-    val title: String
-    val summary: String
     val entries: List<Setting<*>>
+    val icon: DrawableResource
+    val summary: String
+    val title: String
 }
 
 fun SettingCollection.update(newSetting: Setting<*>): SettingCollection {

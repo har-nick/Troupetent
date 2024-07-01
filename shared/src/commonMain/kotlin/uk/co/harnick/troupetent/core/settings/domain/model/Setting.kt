@@ -10,6 +10,4 @@ interface Setting<T> {
     val title: String
     val value: T
     val warning: String?
-
-    fun isInteractable(): Boolean = isVisible
 }

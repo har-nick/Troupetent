@@ -15,9 +15,8 @@ data class DisplaySettings(
     val theme: ThemeSetting = ThemeSetting()
 ) : SettingCollection {
     override val icon: DrawableResource = Res.drawable.display_settings_filled
-
-    override val title: String = "COLLECTION TITLE"
     override val summary: String = "Material You, Seed Colors, Palettes, & Themes"
+    override val title: String = "Display"
     override val entries: List<Setting<*>> =
         listOf(theme, materialYou, materialYouIsh, seedColor, palette, artQuality)
 }

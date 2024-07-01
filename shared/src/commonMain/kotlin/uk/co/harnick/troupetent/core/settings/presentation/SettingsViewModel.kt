@@ -16,6 +16,7 @@ import uk.co.harnick.troupetent.core.settings.domain.model.general.GeneralSettin
 import uk.co.harnick.troupetent.core.settings.domain.model.update
 import uk.co.harnick.troupetent.core.settings.domain.repository.SettingsRepo
 import uk.co.harnick.troupetent.core.settings.presentation.SettingsEvent.Screen.ClearCollection
+import uk.co.harnick.troupetent.core.settings.presentation.SettingsEvent.Screen.SetViewedCollection
 import uk.co.harnick.troupetent.core.settings.presentation.SettingsEvent.Screen.UpdateCollection
 import uk.co.harnick.troupetent.core.settings.presentation.SettingsEvent.VM
 import uk.co.harnick.troupetent.core.ui.presentation.StatefulViewModel
@@ -27,14 +28,18 @@ class SettingsViewModel(
     override fun onEvent(event: SettingsEvent) {
         when (event) {
             is VM -> {}
-            is UpdateCollection<*> -> {
+            is ClearCollection -> when (event.collection) {
+                is DisplaySettings -> settingsRepo.resetDisplaySettings()
+                is GeneralSettings -> settingsRepo.resetGeneralSettings()
+            }
+
+            is UpdateCollection -> {
                 val updatedCollection = event.collection.update(event.newSetting)
                 saveSettings(updatedCollection)
             }
 
-            is ClearCollection<*> -> when (event.collection) {
-                is DisplaySettings -> settingsRepo.resetDisplaySettings()
-                is GeneralSettings -> settingsRepo.resetGeneralSettings()
+            is SetViewedCollection -> {
+                mutableState.update { it.copy(currentlyViewedSettings = event.collection::class) }
             }
         }
     }

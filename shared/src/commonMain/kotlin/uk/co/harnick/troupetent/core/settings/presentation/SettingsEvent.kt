@@ -7,11 +7,13 @@ sealed interface SettingsEvent {
     sealed interface VM : SettingsEvent
 
     sealed interface Screen : SettingsEvent {
-        data class UpdateCollection<T : SettingCollection>(
+        class ClearCollection(val collection: SettingCollection) : SettingsEvent
+
+        class UpdateCollection(
             val newSetting: Setting<*>,
-            val collection: T
+            val collection: SettingCollection
         ) : SettingsEvent
 
-        class ClearCollection<T : SettingCollection>(val collection: T) : SettingsEvent
+        class SetViewedCollection(val collection: SettingCollection) : SettingsEvent
     }
 }

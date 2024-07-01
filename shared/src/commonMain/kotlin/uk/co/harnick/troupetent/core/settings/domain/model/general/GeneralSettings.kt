@@ -10,7 +10,8 @@ data class GeneralSettings(
     val language: LanguageSetting = LanguageSetting(),
 ) : SettingCollection {
     override val icon: DrawableResource = Res.drawable.language
-    override val title: String = "General"
     override val summary: String = "Language"
+    override val title: String = "General"
+
     override val entries: List<Setting<*>> = listOf(language)
 }
