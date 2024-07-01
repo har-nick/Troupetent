@@ -79,7 +79,6 @@ actual object TroupetentTheme {
     actual operator fun invoke(displaySettings: DisplaySettings, content: @Composable () -> Unit) {
         val localContext = LocalContext.current
         val view = LocalView.current
-        val deviceIsInDarkMode = isSystemInDarkTheme()
         val theme = displaySettings.theme.value
         val wallpaperManager = WallpaperManager.getInstance(localContext)
 
@@ -89,7 +88,7 @@ actual object TroupetentTheme {
         val useDarkTheme = when (theme) {
             Amoled, Dark -> true
             Light -> false
-            Auto -> deviceIsInDarkMode
+            Auto -> isSystemInDarkTheme()
         }
 
         val seedColor = when {
